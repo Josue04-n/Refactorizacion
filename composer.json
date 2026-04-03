@@ -1,0 +1,15 @@
+{
+    "name": "lenovo/proyecto-refactorizacion",
+    "autoload": {
+        "psr-4": {
+            "Lenovo\\ProyectoRefactorizacion\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Josue04-n",
+            "email": "llumitasigjosue04@gmail.com"
+        }
+    ],
+    "require": {}
+}
