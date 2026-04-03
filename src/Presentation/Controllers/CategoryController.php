@@ -1,7 +1,6 @@
 <?php
     declare(strict_types=1);
     namespace Lenovo\ProyectoRefactorizacion\Presentation\Controllers;
-    use Lenovo\ProyectoRefactorizacion\Infrastructure\Database\DatabaseConnection;
     
     class CategoryController
     {
