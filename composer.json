@@ -11,5 +11,8 @@
             "email": "llumitasigjosue04@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "bramus/router": "^1.6",
+        "vlucas/phpdotenv": "^5.6"
+    }
 }
