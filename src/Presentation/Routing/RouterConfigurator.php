@@ -25,8 +25,3 @@
             $this->_router->get('/categoria/(\d+)', 'CategoryController@show');
         }
     }
-
-
-
-
-?>
