@@ -44,7 +44,7 @@ use RuntimeException;
                 return $categories;
 
             } catch (PDOException $exception) {
-                throw new RuntimeException('Error al obtener las categorías: ' . $exception->getMessage());
+                throw new RuntimeException('Error al obtener las categorías.', (int) $exception->getCode(), $exception);
             }
         }
     
