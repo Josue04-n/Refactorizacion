@@ -9,14 +9,14 @@ namespace Lenovo\ProyectoRefactorizacion\Domain\Entities;
         private int $_id;
         private string $_name;
         private string $_description;
-        private string $_created;
+        private string $_images;
 
-        public function __construct(int $id, string $name, string $description, string $created = '')
+        public function __construct(int $id, string $name, string $description, string $images = '')
         {
             $this->_id = $id;
             $this->_name = $name;
             $this->_description = $description;
-            $this->_created = $created ?: date('Y-m-d H:i:s');
+            $this->_images = $images;
         }
 
         public function getId(): int
@@ -34,9 +34,9 @@ namespace Lenovo\ProyectoRefactorizacion\Domain\Entities;
             return $this->_description;
         }
 
-        public function getCreated(): string
+        public function getImages(): string
         {
-            return $this->_created;
+            return $this->_images;
         }
     }
 

@@ -5,7 +5,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Bramus\Router\Router;
 use Lenovo\ProyectoRefactorizacion\Infrastructure\Database\DatabaseConnection;
+use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLCategoryRepository;
+use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetCategoriesUseCase;
 use Lenovo\ProyectoRefactorizacion\Presentation\Routing\RouterConfigurator;
+use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\CategoryController;
+use Lenovo\ProyectoRefactorizacion\Presentation\Views\ViewRenderer;
+
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');

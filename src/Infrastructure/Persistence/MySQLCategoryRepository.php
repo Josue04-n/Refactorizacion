@@ -26,7 +26,7 @@ use RuntimeException;
 
         public function getAll(): array {
             try {
-                $query = "SELECT category_id, category_name, category_description, created FROM categories";
+                $query = "SELECT c_id, c_name, c_desc, c_images FROM categories";
                 $statement = $this->_connection->prepare($query);
                 $statement->execute();
                 
@@ -35,10 +35,10 @@ use RuntimeException;
 
                 foreach ($results as $row) {
                     $categories[] = new Category(
-                        (int) $row['category_id'],
-                        $row['category_name'],
-                        $row['category_description'],
-                        $row['created']
+                        (int) $row['c_id'],
+                        $row['c_name'],
+                        $row['c_desc'],
+                        $row['c_images']
                     );
                 }
                 return $categories;
