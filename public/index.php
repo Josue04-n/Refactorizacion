@@ -20,8 +20,15 @@ $databaseConnection = new DatabaseConnection(
 
 $pdo = $databaseConnection->connect();
 
+$categoryRepository = new MySQLCategoryRepository($pdo);
+$getCategoriesUseCase = new GetCategoriesUseCase($categoryRepository);
+
+$viewsPath = __DIR__ . '/../views';
+$viewRenderer = new ViewRenderer($viewsPath);
+
+$categoryController = new CategoryController($getCategoriesUseCase, $viewRenderer);
+
 $router = new Router();
-$routerConfigurator = new RouterConfigurator($router);
+$routerConfigurator = new RouterConfigurator($router, $categoryController);
 $routerConfigurator->registerRoutes();
 $router->run();
-?>
