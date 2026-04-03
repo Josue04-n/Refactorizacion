@@ -3,18 +3,22 @@
 
     namespace Lenovo\ProyectoRefactorizacion\Presentation\Controllers;
 
-    use Lenovo\ProyectoRefactorizacion\Presentation\Views\ViewRenderer;
     use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetCategoriesUseCase;
+    use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetThreadsByCategoryUseCase;
+    use Lenovo\ProyectoRefactorizacion\Presentation\Views\ViewRenderer;
 
     class CategoryController
     {
+        private GetThreadsByCategoryUseCase $_getThreadsByCategoryUseCase;
         private GetCategoriesUseCase $_getCategoriesUseCase;
         private ViewRenderer $_viewRenderer;
 
         public function __construct(
         GetCategoriesUseCase $getCategoriesUseCase,
+        GetThreadsByCategoryUseCase $getThreadsByCategoryUseCase,
         ViewRenderer $viewRenderer
         ) {
+            $this->_getThreadsByCategoryUseCase = $getThreadsByCategoryUseCase;
             $this->_getCategoriesUseCase = $getCategoriesUseCase;
             $this->_viewRenderer = $viewRenderer;
         }
@@ -29,7 +33,11 @@
         }
 
         public function show(string $id): void {
-            echo "Mostrando el contenido de la categoría con ID: " . htmlspecialchars($id);
+            $categoryId = (int) $id;
+            $threads = $this->_getThreadsByCategoryUseCase->execute($categoryId);
+            $this->_viewRenderer->render('category/show', [
+                'threads' => $threads
+            ]);
         }
     }
 ?>
