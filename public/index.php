@@ -5,6 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Bramus\Router\Router;
 use Lenovo\ProyectoRefactorizacion\Infrastructure\Database\DatabaseConnection;
+use Lenovo\ProyectoRefactorizacion\Presentation\Routing\RouterConfigurator;
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
@@ -20,10 +21,7 @@ $databaseConnection = new DatabaseConnection(
 $pdo = $databaseConnection->connect();
 
 $router = new Router();
-
-$router->get('/', function () {
-    echo "¡La nueva Clean Architecture de iDiscuss está funcionando!";
-});
-
+$routerConfigurator = new RouterConfigurator($router);
+$routerConfigurator->registerRoutes();
 $router->run();
 ?>
