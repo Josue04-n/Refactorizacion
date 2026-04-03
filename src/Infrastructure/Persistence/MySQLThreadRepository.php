@@ -28,7 +28,7 @@ class MySQLThreadRepository implements ThreadRepositoryInterface
     public function getByCategoryId(int $categoryId): array
     {
         try {
-            // Usamos el nombre real de las columnas según tu base de datos
+            // Se consultan las columnas persistidas en la tabla threads
             $query = "SELECT threads_id, threads_title, threads_desc, threads_cat_id, threads_user_id, threads_reg_date
                       FROM threads 
                       WHERE threads_cat_id = :categoryId";
