@@ -19,7 +19,7 @@
                             </p>
                         </div>
                         <div class="card-footer bg-transparent border-top-0">
-                            <small class="text-muted"><?php echo htmlspecialchars($category->getCreated()); ?></small>
+                            <!-- c_reg_date removed -->
                         </div>
                     </div>
                 </div>
