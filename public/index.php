@@ -6,10 +6,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Bramus\Router\Router;
 use Lenovo\ProyectoRefactorizacion\Infrastructure\Database\DatabaseConnection;
 use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLCategoryRepository;
+use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLThreadRepository;
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetCategoriesUseCase;
-use Lenovo\ProyectoRefactorizacion\Presentation\Routing\RouterConfigurator;
-use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\CategoryController;
+use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetThreadsByCategoryUseCase;
 use Lenovo\ProyectoRefactorizacion\Presentation\Views\ViewRenderer;
+use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\CategoryController;
+use Lenovo\ProyectoRefactorizacion\Presentation\Routing\RouterConfigurator;
 
 use Dotenv\Dotenv;
 
@@ -28,10 +30,17 @@ $pdo = $databaseConnection->connect();
 $categoryRepository = new MySQLCategoryRepository($pdo);
 $getCategoriesUseCase = new GetCategoriesUseCase($categoryRepository);
 
+$categoryRepository = new MySQLCategoryRepository($pdo);
+$getThreadsByCategoryUseCase = new GetThreadsByCategoryUseCase($categoryRepository);
+
 $viewsPath = __DIR__ . '/../views';
 $viewRenderer = new ViewRenderer($viewsPath);
 
-$categoryController = new CategoryController($getCategoriesUseCase, $viewRenderer);
+$categoryController = new CategoryController(
+    $getCategoriesUseCase, 
+    $getThreadsByCategoryUseCase,
+    $viewRenderer
+);
 
 $router = new Router();
 $routerConfigurator = new RouterConfigurator($router, $categoryController);
