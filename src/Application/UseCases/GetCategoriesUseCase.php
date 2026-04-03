@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lenovo\ProyectoRefactorizacion\Application\UseCases;
 
+use Lenovo\ProyectoRefactorizacion\Domain\Repositories\CategoryRepositoryInterface;
+
 class GetCategoriesUseCase
 {
     private CategoryRepositoryInterface $_categoryRepository;
