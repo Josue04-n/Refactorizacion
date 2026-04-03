@@ -4,20 +4,28 @@
     namespace Lenovo\ProyectoRefactorizacion\Presentation\Controllers;
 
     use Lenovo\ProyectoRefactorizacion\Presentation\Views\ViewRenderer;
-    
+    use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetCategoriesUseCase;
+
     class CategoryController
     {
+        private GetCategoriesUseCase $_getCategoriesUseCase;
         private ViewRenderer $_viewRenderer;
 
-        public function __construct(){
-            $viewsPath = __DIR__ . '/../../../views';
-            $this->_viewRenderer = new ViewRenderer($viewsPath);
+        public function __construct(
+        GetCategoriesUseCase $getCategoriesUseCase,
+        ViewRenderer $viewRenderer
+        ) {
+            $this->_getCategoriesUseCase = $getCategoriesUseCase;
+            $this->_viewRenderer = $viewRenderer;
         }
 
-        public function index() {
+        public function index(): void
+        {
+            $categories = $this->_getCategoriesUseCase->execute();
+
             $this->_viewRenderer->render('category/index', [
-            'titulo' => 'Foro Principal'
-        ]);
+                'categories' => $categories
+            ]);
         }
 
         public function show(string $id): void {
