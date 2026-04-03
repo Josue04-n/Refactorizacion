@@ -40,7 +40,7 @@ class DatabaseConnection
                 $this->_connection = new PDO($dataSourceName, $this->_username, $this->_password, $options);
                 
             } catch (PDOException $exception) {
-                throw new RuntimeException($exception->getMessage());
+                throw new RuntimeException('Error al conectar a la base de datos', (int) $exception->getCode(), $exception);
             }
         }
 
