@@ -30,8 +30,8 @@ $pdo = $databaseConnection->connect();
 $categoryRepository = new MySQLCategoryRepository($pdo);
 $getCategoriesUseCase = new GetCategoriesUseCase($categoryRepository);
 
-$categoryRepository = new MySQLCategoryRepository($pdo);
-$getThreadsByCategoryUseCase = new GetThreadsByCategoryUseCase($categoryRepository);
+$threadRepository = new MySQLThreadRepository($pdo);
+$getThreadsByCategoryUseCase = new GetThreadsByCategoryUseCase($threadRepository);
 
 $viewsPath = __DIR__ . '/../views';
 $viewRenderer = new ViewRenderer($viewsPath);
