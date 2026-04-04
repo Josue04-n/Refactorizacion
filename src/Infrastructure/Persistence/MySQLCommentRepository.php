@@ -53,7 +53,11 @@ class MySQLCommentRepository implements CommentRepositoryInterface
             return $comments;
 
         } catch (PDOException $exception) {
-            throw new RuntimeException("Error al obtener los comentarios de la base de datos.");
+            throw new RuntimeException(
+                "Error al obtener los comentarios de la base de datos.",
+                (int) $exception->getCode(),
+                $exception
+            );
         }
     }
 }
