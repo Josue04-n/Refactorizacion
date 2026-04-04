@@ -21,15 +21,20 @@ class MySQLUserRepository implements UserRepositoryInterface
     public function save(User $user): bool
     {
         try {
-            // Asumiendo tabla "users" con columnas: user_email, password, timestamp
-            $sql = "INSERT INTO users (user_email, password, timestamp) VALUES (:email, :password, current_timestamp())";
+            // Base de datos real: tabla users con columnas username, user_email, password, user_image, timestamp
+            $sql = "INSERT INTO users (username, user_email, password, user_image, timestamp) 
+                    VALUES (:username, :email, :password, :image, current_timestamp())";
             $stmt = $this->connection->prepare($sql);
             
+            $username = $user->getUsername();
             $email = $user->getEmail();
             $hash = $user->getPasswordHash();
+            $image = $user->getUserImage();
 
+            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->bindParam(':password', $hash, PDO::PARAM_STR);
+            $stmt->bindParam(':image', $image, PDO::PARAM_STR);
 
             return $stmt->execute();
         } catch (Exception $e) {
@@ -41,7 +46,8 @@ class MySQLUserRepository implements UserRepositoryInterface
     public function findByEmail(string $email): ?User
     {
         try {
-            $sql = "SELECT id, user_email, password, timestamp FROM users WHERE user_email = :email LIMIT 1";
+            $sql = "SELECT id, username, user_email, password, user_image, timestamp 
+                    FROM users WHERE user_email = :email LIMIT 1";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->execute();
@@ -53,8 +59,10 @@ class MySQLUserRepository implements UserRepositoryInterface
             }
 
             return new User(
+                $row['username'],
                 $row['user_email'],
                 $row['password'],
+                $row['user_image'],
                 (int) $row['id'],
                 $row['timestamp']
             );
