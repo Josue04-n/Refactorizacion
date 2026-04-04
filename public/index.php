@@ -13,6 +13,11 @@ use Lenovo\ProyectoRefactorizacion\Presentation\Views\ViewRenderer;
 use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\CategoryController;
 use Lenovo\ProyectoRefactorizacion\Presentation\Routing\RouterConfigurator;
 use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\ThreadController;
+use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\AuthController;
+use Lenovo\ProyectoRefactorizacion\Domain\Entities\User;
+use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLUserRepository;
+use Lenovo\ProyectoRefactorizacion\Application\UseCases\LoginUserUseCase;
+use Lenovo\ProyectoRefactorizacion\Application\UseCases\RegisterUserUseCase;
 
 use Dotenv\Dotenv;
 
@@ -48,7 +53,17 @@ $threadController = new ThreadController(
     $viewRenderer
 );
 
+$userRepository = new MySQLUserRepository($pdo);
+$registerUserUseCase = new RegisterUserUseCase($userRepository);
+$loginUserUseCase = new LoginUserUseCase($userRepository);
+
+$authController = new AuthController(
+    $registerUserUseCase,
+    $loginUserUseCase,
+    $viewRenderer
+);
+
 $router = new Router();
-$routerConfigurator = new RouterConfigurator($router, $categoryController, $threadController);
+$routerConfigurator = new RouterConfigurator($router, $categoryController, $threadController, $authController);
 $routerConfigurator->registerRoutes();
 $router->run();

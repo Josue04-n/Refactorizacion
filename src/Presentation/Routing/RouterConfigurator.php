@@ -7,22 +7,25 @@
     use Bramus\Router\Router;
     use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\CategoryController;
     use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\ThreadController;
+    use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\AuthController;
 
     class RouterConfigurator
     {
         private Router $_router;
         private CategoryController $_categoryController;
         private ThreadController $_threadController;
+        private AuthController $_authController;
 
         public function __construct(
             Router $router, 
             CategoryController $categoryController,
-            ThreadController $threadController
+            ThreadController $threadController,
+            AuthController $authController
         ){
             $this->_router = $router;
             $this->_categoryController = $categoryController;
             $this->_threadController = $threadController;
-            
+            $this->_authController = $authController;
         }
 
         public function registerRoutes(): void
@@ -32,6 +35,7 @@
 
             $categoryController = $this->_categoryController;
             $threadController = $this->_threadController;
+            $authController = $this->_authController;
 
             $this->_router->get('/', function () use ($categoryController) {
                 $categoryController->index();
@@ -43,6 +47,26 @@
 
             $this->_router->get('/hilo/(\d+)', function (string $id) use ($threadController) {
                 $threadController->show($id);
+            });
+
+            $this->_router->get('/login', function () use ($authController) {
+                $authController->showLogin();
+            });
+
+            $this->_router->post('/login', function () use ($authController) {
+                $authController->login();
+            });
+
+            $this->_router->get('/register', function () use ($authController) {
+                $authController->showRegister();
+            });
+
+            $this->_router->post('/register', function () use ($authController) {
+                $authController->register();
+            });
+
+            $this->_router->get('/logout', function () use ($authController) {
+                $authController->logout();
             });
         }
     }
