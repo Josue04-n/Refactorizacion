@@ -12,6 +12,7 @@ use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetThreadsByCategoryUseC
 use Lenovo\ProyectoRefactorizacion\Presentation\Views\ViewRenderer;
 use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\CategoryController;
 use Lenovo\ProyectoRefactorizacion\Presentation\Routing\RouterConfigurator;
+use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\ThreadController;
 
 use Dotenv\Dotenv;
 
@@ -42,7 +43,12 @@ $categoryController = new CategoryController(
     $viewRenderer
 );
 
+$threadController = new ThreadController(
+    $getCommentsByThreadUseCase,
+    $viewRenderer
+);
+
 $router = new Router();
-$routerConfigurator = new RouterConfigurator($router, $categoryController);
+$routerConfigurator = new RouterConfigurator($router, $categoryController, $threadController);
 $routerConfigurator->registerRoutes();
 $router->run();
