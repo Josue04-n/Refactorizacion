@@ -55,7 +55,7 @@
                 $userId = $_SESSION['user_id'] ?? null;
                 if ($userId && $title && $description) {
                     $this->_createThreadUseCase->execute($title, $description, (int)$categoryId, (int)$userId);
-                }
+                    }
                 // Redirigir a la vista de la categoría para evitar reenvío
                 header('Location: /categoria/' . $categoryId);
                 exit;
