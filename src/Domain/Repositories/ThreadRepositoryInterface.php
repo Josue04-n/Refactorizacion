@@ -21,5 +21,11 @@ interface ThreadRepositoryInterface
      * @return array<\Lenovo\ProyectoRefactorizacion\Domain\Entities\Thread>
      */
     public function search(string $keyword): array;
-    
+
+    /**
+     * Guarda un hilo en la base de datos.
+     * @param \Lenovo\ProyectoRefactorizacion\Domain\Entities\Thread $thread
+     * @return bool
+     */
+    public function save(\Lenovo\ProyectoRefactorizacion\Domain\Entities\Thread $thread): bool;
 }

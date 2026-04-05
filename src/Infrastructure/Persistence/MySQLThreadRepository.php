@@ -96,4 +96,29 @@ class MySQLThreadRepository implements ThreadRepositoryInterface
         }
     }
     
+    /**
+     * Guarda un hilo en la base de datos.
+     * @param Thread $thread
+     * @return bool
+     */
+    public function save(Thread $thread): bool
+    {
+        try {
+            $query = "INSERT INTO threads (threads_title, threads_desc, threads_cat_id, threads_user_id, threads_reg_date) VALUES (:title, :description, :categoryId, :userId, :timestamp)";
+            $statement = $this->_connection->prepare($query);
+            $title = $thread->getTitle();
+            $description = $thread->getDescription();
+            $categoryId = $thread->getCategoryId();
+            $userId = $thread->getUserId();
+            $timestamp = $thread->getTimestamp();
+            $statement->bindParam(':title', $title, PDO::PARAM_STR);
+            $statement->bindParam(':description', $description, PDO::PARAM_STR);
+            $statement->bindParam(':categoryId', $categoryId, PDO::PARAM_INT);
+            $statement->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $statement->bindParam(':timestamp', $timestamp, PDO::PARAM_STR);
+            return $statement->execute();
+        } catch (PDOException $exception) {
+            throw new RuntimeException("Error al guardar el hilo en la base de datos.", (int) $exception->getCode(), $exception);
+        }
+    }
 }
