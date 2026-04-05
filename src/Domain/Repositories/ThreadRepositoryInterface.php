@@ -13,4 +13,7 @@ interface ThreadRepositoryInterface
      * @return array<\Lenovo\ProyectoRefactorizacion\Domain\Entities\Thread>
      */
     public function getByCategoryId(int $categoryId): array;
+
+    public function search(string $keyword): array;
+    
 }

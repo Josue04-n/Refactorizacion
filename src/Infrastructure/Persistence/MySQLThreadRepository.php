@@ -57,4 +57,42 @@ class MySQLThreadRepository implements ThreadRepositoryInterface
             throw new RuntimeException("Error al obtener los hilos de la base de datos.");
         }
     }
+
+    public function search(string $keyword): array
+    {
+        try {
+            $query = "SELECT thread_id, thread_title, thread_desc, thread_cat_id, thread_user_id, timestamp 
+                      FROM threads 
+                      WHERE thread_title LIKE :keyword OR thread_desc LIKE :keyword";
+            
+            $statement = $this->_connection->prepare($query);
+            
+            // Envolvemos la palabra clave con % para la búsqueda LIKE
+            $searchTerm = '%' . $keyword . '%';
+            $statement->bindParam(':keyword', $searchTerm, PDO::PARAM_STR);
+            
+            $statement->execute();
+            
+            $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $threads = [];
+
+            // Data Mapper: Convertimos las filas a objetos Thread
+            foreach ($results as $row) {
+                $threads[] = new Thread(
+                    (int) $row['thread_id'],
+                    $row['thread_title'],
+                    $row['thread_desc'],
+                    (int) $row['thread_cat_id'],
+                    (int) $row['thread_user_id'],
+                    $row['timestamp']
+                );
+            }
+
+            return $threads;
+
+        } catch (PDOException $exception) {
+            throw new RuntimeException("Error al buscar hilos en la base de datos.");
+        }
+    }
+    
 }
