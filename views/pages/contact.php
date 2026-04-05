@@ -7,10 +7,10 @@
                 <h2 class="my-4 text-light text-center">Contact Us</h2>
                 
                 <?php if(isset($_SESSION['errormessage'])): ?>
-                    <div class="alert alert-danger"><?php echo $_SESSION['errormessage']; unset($_SESSION['errormessage']); ?></div>
+                    <div class="alert alert-danger"><?php echo htmlspecialchars($_SESSION['errormessage'], ENT_QUOTES, 'UTF-8'); unset($_SESSION['errormessage']); ?></div>
                 <?php endif; ?>
                 <?php if(isset($_SESSION['successmessage'])): ?>
-                    <div class="alert alert-success"><?php echo $_SESSION['successmessage']; unset($_SESSION['successmessage']); ?></div>
+                    <div class="alert alert-success"><?php echo htmlspecialchars($_SESSION['successmessage'], ENT_QUOTES, 'UTF-8'); unset($_SESSION['successmessage']); ?></div>
                 <?php endif; ?>
 
                 <form action="/proyectorefactorizacion/public/contact/guardar" method="POST">
