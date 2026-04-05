@@ -63,13 +63,14 @@ class MySQLThreadRepository implements ThreadRepositoryInterface
         try {
             $query = "SELECT thread_id, thread_title, thread_desc, thread_cat_id, thread_user_id, timestamp 
                       FROM threads 
-                      WHERE thread_title LIKE :keyword OR thread_desc LIKE :keyword";
+                      WHERE thread_title LIKE :titleKeyword OR thread_desc LIKE :descKeyword";
             
             $statement = $this->_connection->prepare($query);
             
             // Envolvemos la palabra clave con % para la búsqueda LIKE
             $searchTerm = '%' . $keyword . '%';
-            $statement->bindParam(':keyword', $searchTerm, PDO::PARAM_STR);
+            $statement->bindValue(':titleKeyword', $searchTerm, PDO::PARAM_STR);
+            $statement->bindValue(':descKeyword', $searchTerm, PDO::PARAM_STR);
             
             $statement->execute();
             
