@@ -14,6 +14,12 @@ interface ThreadRepositoryInterface
      */
     public function getByCategoryId(int $categoryId): array;
 
+    /**
+     * Busca hilos por palabra clave.
+     *
+     * @param string $keyword La palabra clave de búsqueda
+     * @return array<\Lenovo\ProyectoRefactorizacion\Domain\Entities\Thread>
+     */
     public function search(string $keyword): array;
     
 }
