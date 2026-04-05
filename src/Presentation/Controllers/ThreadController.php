@@ -30,4 +30,22 @@ class ThreadController
             'threadId' => $threadId
         ]);
     }
+
+    public function storeComment(string $threadId): void
+    {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /proyectorefactorizacion/public/login');
+            exit();
+        }
+
+        $threadId = (int) $id;
+        $userId = (int) $_SESSION['user_id'];
+        $content = $_POST['comment_content'] ?? '';
+
+        
+         $this->_createCommentUseCase->execute($content, $threadId, $userId);
+
+        header("Location: /proyectorefactorizacion/public/thread/" . $threadId);
+        exit();
+    }
 }
