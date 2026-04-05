@@ -17,19 +17,23 @@
         private ThreadController $_threadController;
         private AuthController $_authController;
         private SearchController $_searchController;
+        private PageController $_pageController;
 
         public function __construct(
             Router $router, 
             CategoryController $categoryController,
             ThreadController $threadController,
             AuthController $authController,
-            SearchController $searchController
+            SearchController $searchController,
+            PageController $pageController
         ){
             $this->_router = $router;
             $this->_categoryController = $categoryController;
             $this->_threadController = $threadController;
             $this->_authController = $authController;
             $this->_searchController = $searchController;
+            $this->_pageController = $pageController;
+
         }
 
         public function registerRoutes(): void
@@ -41,6 +45,7 @@
             $threadController = $this->_threadController;
             $authController = $this->_authController;
             $searchController = $this->_searchController;
+            $pageController = $this->_pageController;
 
 
             $this->_router->get('/', function () use ($categoryController) {
@@ -51,7 +56,6 @@
                 $categoryController->show($id);
             });
 
-            // Ruta POST para crear un hilo en una categoría
             $this->_router->post('/categoria/(\d+)/hilo', function (string $categoryId) use ($categoryController) {
                 $categoryController->storeThread($categoryId);
             });
@@ -60,7 +64,6 @@
                 $threadController->show($id);
             });
 
-            // Ruta POST para crear un comentario en un hilo
             $this->_router->post('/hilo/(\d+)/comentario', function (string $threadId) use ($threadController) {
                 $threadController->storeComment($threadId);
             });
@@ -88,6 +91,10 @@
             $this->_router->get('/buscar', function () use ($searchController) {
                 $searchController->index();
             });
+
+            $this->_router->get('/about', function () use ($pageController) {
+                 $pageController->about();
+             });
 
         }
     }
