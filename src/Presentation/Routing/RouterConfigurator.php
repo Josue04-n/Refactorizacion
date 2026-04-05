@@ -26,7 +26,7 @@
             ThreadController $threadController,
             AuthController $authController,
             SearchController $searchController,
-            PageController $pageController,
+            PageController $pageController
         ){
             $this->_router = $router;
             $this->_categoryController = $categoryController;
