@@ -24,6 +24,7 @@ use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetCommentsByThreadUseCa
 use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLCommentRepository;
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\SearchThreadsUseCase;
 use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\SearchController;
+use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\PageController;
 
 use Dotenv\Dotenv;
 

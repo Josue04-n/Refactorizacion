@@ -9,6 +9,7 @@
     use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\ThreadController;
     use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\AuthController;
     use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\SearchController;
+    use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\PageController;
 
     class RouterConfigurator
     {
