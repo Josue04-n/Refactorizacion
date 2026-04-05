@@ -45,8 +45,18 @@
                 $categoryController->show($id);
             });
 
+            // Ruta POST para crear un hilo en una categoría
+            $this->_router->post('/categoria/(\d+)/hilo', function (string $categoryId) use ($categoryController) {
+                $categoryController->storeThread($categoryId);
+            });
+
             $this->_router->get('/hilo/(\d+)', function (string $id) use ($threadController) {
                 $threadController->show($id);
+            });
+
+            // Ruta POST para crear un comentario en un hilo
+            $this->_router->post('/hilo/(\d+)/comentario', function (string $threadId) use ($threadController) {
+                $threadController->storeComment($threadId);
             });
 
             $this->_router->get('/login', function () use ($authController) {
