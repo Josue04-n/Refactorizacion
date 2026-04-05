@@ -43,6 +43,9 @@ $viewRenderer = new ViewRenderer($viewsPath);
 $categoryRepository = new MySQLCategoryRepository($pdo);
 $getCategoriesUseCase = new GetCategoriesUseCase($categoryRepository);
 
+$globalCategories = $getCategoriesUseCase->execute();
+$viewRenderer->addGlobal('globalCategories', $globalCategories);
+
 $threadRepository = new MySQLThreadRepository($pdo);
 $getThreadsByCategoryUseCase = new GetThreadsByCategoryUseCase($threadRepository);
 
