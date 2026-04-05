@@ -103,7 +103,7 @@
             });
 
             $this->_router->post('/contact/guardar', function () use ($pageController) {
-                $pageController->storeContact();
+                $pageController->contact();
             });
 
         }
