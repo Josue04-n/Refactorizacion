@@ -61,9 +61,9 @@ class MySQLThreadRepository implements ThreadRepositoryInterface
     public function search(string $keyword): array
     {
         try {
-            $query = "SELECT thread_id, thread_title, thread_desc, thread_cat_id, thread_user_id, timestamp 
+            $query = "SELECT threads_id, threads_title, threads_desc, threads_cat_id, threads_user_id, threads_reg_date 
                       FROM threads 
-                      WHERE thread_title LIKE :titleKeyword OR thread_desc LIKE :descKeyword";
+                      WHERE threads_title LIKE :titleKeyword OR threads_desc LIKE :descKeyword";
             
             $statement = $this->_connection->prepare($query);
             
@@ -80,12 +80,12 @@ class MySQLThreadRepository implements ThreadRepositoryInterface
             // Data Mapper: Convertimos las filas a objetos Thread
             foreach ($results as $row) {
                 $threads[] = new Thread(
-                    (int) $row['thread_id'],
-                    $row['thread_title'],
-                    $row['thread_desc'],
-                    (int) $row['thread_cat_id'],
-                    (int) $row['thread_user_id'],
-                    $row['timestamp']
+                    (int) $row['threads_id'],
+                    $row['threads_title'],
+                    $row['threads_desc'],
+                    (int) $row['threads_cat_id'],
+                    (int) $row['threads_user_id'],
+                    $row['threads_reg_date']
                 );
             }
 

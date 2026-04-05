@@ -33,9 +33,14 @@ class PageController
 
     public function contact(): void
     {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->_viewRenderer->render('pages/contact');
+            return;
+        }
+
         if (!isset($_SESSION['user_id'])) {
             $_SESSION['errormessage'] = "Por favor, inicia sesión para contactarnos.";
-            header('Location: /proyectorefactorizacion/public/contact');
+            header('Location: /proyectorefactorizacion/public/login');
             exit;
         }
 
