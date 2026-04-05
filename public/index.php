@@ -54,6 +54,8 @@ $viewRenderer = new ViewRenderer($viewsPath);
 $searchThreadsUseCase = new SearchThreadsUseCase($threadRepository);
 $searchController = new SearchController($searchThreadsUseCase, $viewRenderer);
 
+$pageController = new PageController($viewRenderer);
+
 $createThreadUseCase = new \Lenovo\ProyectoRefactorizacion\Application\UseCases\CreateThreadUseCase($threadRepository);
 $createCommentUseCase = new \Lenovo\ProyectoRefactorizacion\Application\UseCases\CreateCommentUseCase($commentRepository);
 
@@ -86,7 +88,8 @@ $routerConfigurator = new RouterConfigurator(
     $categoryController, 
     $threadController, 
     $authController, 
-    $searchController
+    $searchController,
+    $pageController
 );
 
 $routerConfigurator->registerRoutes();
