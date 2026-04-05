@@ -25,20 +25,20 @@ use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLCommentReposi
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\SearchThreadsUseCase;
 use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\SearchController;
 use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\PageController;
+use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLContactRepository;
+use Lenovo\ProyectoRefactorizacion\Application\UseCases\SaveContactMessageUseCase;
+
 
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-$databaseConnection = new DatabaseConnection(
-    $_ENV['DB_HOST'],
-    $_ENV['DB_DATABASE'],
-    $_ENV['DB_USERNAME'],
-    $_ENV['DB_PASSWORD']
-);
-
+$databaseConnection = new DatabaseConnection($_ENV['DB_HOST'], $_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
 $pdo = $databaseConnection->connect();
+
+$viewsPath = __DIR__ . '/../views';
+$viewRenderer = new ViewRenderer($viewsPath);
 
 $categoryRepository = new MySQLCategoryRepository($pdo);
 $getCategoriesUseCase = new GetCategoriesUseCase($categoryRepository);
@@ -49,20 +49,17 @@ $getThreadsByCategoryUseCase = new GetThreadsByCategoryUseCase($threadRepository
 $commentRepository = new MySQLCommentRepository($pdo);
 $getCommentsByThreadUseCase = new GetCommentsByThreadUseCase($commentRepository);
 
-$viewsPath = __DIR__ . '/../views';
-$viewRenderer = new ViewRenderer($viewsPath);
-
 $searchThreadsUseCase = new SearchThreadsUseCase($threadRepository);
-$searchController = new SearchController($searchThreadsUseCase, $viewRenderer);
 
-$pageController = new PageController($viewRenderer);
+$contactRepository = new MySQLContactRepository($pdo);
+$saveContactMessageUseCase = new SaveContactMessageUseCase($contactRepository);
 
 $createThreadUseCase = new \Lenovo\ProyectoRefactorizacion\Application\UseCases\CreateThreadUseCase($threadRepository);
 $createCommentUseCase = new \Lenovo\ProyectoRefactorizacion\Application\UseCases\CreateCommentUseCase($commentRepository);
 
 $categoryController = new CategoryController(
-    $getCategoriesUseCase,
-    $getThreadsByCategoryUseCase,
+    $getCategoriesUseCase, 
+    $getThreadsByCategoryUseCase, 
     $createThreadUseCase,
     $viewRenderer
 );
@@ -71,6 +68,16 @@ $threadController = new ThreadController(
     $getCommentsByThreadUseCase,
     $createCommentUseCase,
     $viewRenderer
+);
+
+$searchController = new SearchController(
+    $searchThreadsUseCase, 
+    $viewRenderer
+);
+
+$pageController = new PageController(
+    $viewRenderer, 
+    $saveContactMessageUseCase
 );
 
 $userRepository = new MySQLUserRepository($pdo);

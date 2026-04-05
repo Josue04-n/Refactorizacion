@@ -34,6 +34,7 @@
             $this->_authController = $authController;
             $this->_searchController = $searchController;
             $this->_pageController = $pageController;
+            
 
         }
 
@@ -96,6 +97,14 @@
             $this->_router->get('/about', function () use ($pageController) {
                  $pageController->about();
              });
+
+            $this->_router->get('/contact', function () use ($pageController) {
+                $pageController->contact();
+            });
+
+            $this->_router->post('/contact/guardar', function () use ($pageController) {
+                $pageController->contact();
+            });
 
         }
     }
