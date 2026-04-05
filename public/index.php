@@ -22,6 +22,8 @@ use Lenovo\ProyectoRefactorizacion\Application\UseCases\LoginUserUseCase;
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\RegisterUserUseCase;
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetCommentsByThreadUseCase;
 use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLCommentRepository;
+use Lenovo\ProyectoRefactorizacion\Application\UseCases\SearchThreadsUseCase;
+use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\SearchController;
 
 use Dotenv\Dotenv;
 
@@ -46,11 +48,11 @@ $getThreadsByCategoryUseCase = new GetThreadsByCategoryUseCase($threadRepository
 $commentRepository = new MySQLCommentRepository($pdo);
 $getCommentsByThreadUseCase = new GetCommentsByThreadUseCase($commentRepository);
 
-$searchThreadsUseCase = new SearchThreadsUseCase($threadRepository);
-$searchController = new SearchController($searchThreadsUseCase, $viewRenderer);
-
 $viewsPath = __DIR__ . '/../views';
 $viewRenderer = new ViewRenderer($viewsPath);
+
+$searchThreadsUseCase = new SearchThreadsUseCase($threadRepository);
+$searchController = new SearchController($searchThreadsUseCase, $viewRenderer);
 
 $createThreadUseCase = new \Lenovo\ProyectoRefactorizacion\Application\UseCases\CreateThreadUseCase($threadRepository);
 $createCommentUseCase = new \Lenovo\ProyectoRefactorizacion\Application\UseCases\CreateCommentUseCase($commentRepository);

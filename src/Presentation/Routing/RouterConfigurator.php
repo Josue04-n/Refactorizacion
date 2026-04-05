@@ -8,6 +8,7 @@
     use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\CategoryController;
     use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\ThreadController;
     use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\AuthController;
+    use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\SearchController;
 
     class RouterConfigurator
     {
@@ -15,17 +16,20 @@
         private CategoryController $_categoryController;
         private ThreadController $_threadController;
         private AuthController $_authController;
+        private SearchController $_searchController;
 
         public function __construct(
             Router $router, 
             CategoryController $categoryController,
             ThreadController $threadController,
-            AuthController $authController
+            AuthController $authController,
+            SearchController $searchController
         ){
             $this->_router = $router;
             $this->_categoryController = $categoryController;
             $this->_threadController = $threadController;
             $this->_authController = $authController;
+            $this->_searchController = $searchController;
         }
 
         public function registerRoutes(): void
