@@ -29,9 +29,15 @@ class MySQLThreadRepository implements ThreadRepositoryInterface
     {
         try {
             // Se consultan las columnas persistidas en la tabla threads
-            $query = "SELECT threads_id, threads_title, threads_desc, threads_cat_id, threads_user_id, threads_reg_date
-                      FROM threads 
-                      WHERE threads_cat_id = :categoryId";
+            $query = "SELECT t.threads_id, t.threads_title, t.threads_desc, 
+                             t.threads_cat_id, t.threads_user_id, t.threads_reg_date,
+                             COUNT(c.comment_id) AS reply_count
+                      FROM threads t
+                      LEFT JOIN comments c ON t.threads_id = c.thread_id
+                      WHERE t.threads_cat_id = :categoryId
+                      GROUP BY t.threads_id, t.threads_title, t.threads_desc, 
+                               t.threads_cat_id, t.threads_user_id, t.threads_reg_date
+                      ORDER BY t.threads_reg_date DESC";
             
             $statement = $this->_connection->prepare($query);
             $statement->bindParam(':categoryId', $categoryId, PDO::PARAM_INT);
@@ -47,7 +53,8 @@ class MySQLThreadRepository implements ThreadRepositoryInterface
                     $row['threads_desc'],
                     (int) $row['threads_cat_id'],
                     (int) $row['threads_user_id'],
-                    $row['threads_reg_date']
+                    $row['threads_reg_date'],
+                    (int) $row['reply_count']
                 );
             }
 

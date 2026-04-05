@@ -12,6 +12,7 @@ class Thread
     private int $_categoryId;
     private int $_userId;
     private string $_timestamp;
+    private int $_replyCount;
 
     public function __construct(
         int $id, 
@@ -19,13 +20,15 @@ class Thread
         string $description, 
         int $categoryId, 
         int $userId, 
-        string $timestamp
+        string $timestamp,
+        int $replyCount = 0
     ) {
         $this->_id = $id;
         $this->_title = $title;
         $this->_description = $description;
         $this->_categoryId = $categoryId;
         $this->_userId = $userId;
+        $this->_replyCount = $replyCount;
         $this->_timestamp = $timestamp;
     }
 
@@ -57,5 +60,10 @@ class Thread
     public function getTimestamp(): string
     {
         return $this->_timestamp;
+    }
+
+    public function getReplyCount(): int 
+    { 
+        return $this->_replyCount; 
     }
 }
