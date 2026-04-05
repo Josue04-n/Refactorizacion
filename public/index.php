@@ -46,6 +46,9 @@ $getThreadsByCategoryUseCase = new GetThreadsByCategoryUseCase($threadRepository
 $commentRepository = new MySQLCommentRepository($pdo);
 $getCommentsByThreadUseCase = new GetCommentsByThreadUseCase($commentRepository);
 
+$searchThreadsUseCase = new SearchThreadsUseCase($threadRepository);
+$searchController = new SearchController($searchThreadsUseCase, $viewRenderer);
+
 $viewsPath = __DIR__ . '/../views';
 $viewRenderer = new ViewRenderer($viewsPath);
 
@@ -76,6 +79,13 @@ $authController = new AuthController(
 );
 
 $router = new Router();
-$routerConfigurator = new RouterConfigurator($router, $categoryController, $threadController, $authController);
+$routerConfigurator = new RouterConfigurator(
+    $router, 
+    $categoryController, 
+    $threadController, 
+    $authController, 
+    $searchController
+);
+
 $routerConfigurator->registerRoutes();
 $router->run();
