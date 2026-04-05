@@ -36,6 +36,8 @@
             $categoryController = $this->_categoryController;
             $threadController = $this->_threadController;
             $authController = $this->_authController;
+            $searchController = $this->_searchController;
+
 
             $this->_router->get('/', function () use ($categoryController) {
                 $categoryController->index();
@@ -78,5 +80,10 @@
             $this->_router->get('/logout', function () use ($authController) {
                 $authController->logout();
             });
+
+            $this->_router->get('/buscar', function () use ($searchController) {
+                $searchController->index();
+            });
+
         }
     }
