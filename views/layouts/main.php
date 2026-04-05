@@ -3,128 +3,106 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">      
-    <title>iDiscuss Foro - Refactorizado</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iDiscuss Foro</title>
+    <link rel="icon" type="image/x-icon" href="/proyectorefactorizacion/public/imgs/icons8-poison-16.png">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
     <link rel="stylesheet" href="/proyectorefactorizacion/public/css_js/style.css">
-    
-    <style>
-        body {
-            background-color: #0b0f19; 
-            color: #ffffff;
-        }
-        
-        #navbarr { 
-            background-color: #060a11 !important; 
-            border-bottom: 1px solid #1f2937; 
-        }
-        
-        .navbar-brand .fa-weixin { color: red; font-size: 35px; }
-        
-        .nav-link { color: #d1d5db !important; transition: 0.3s; }
-        .nav-link:hover { color: red !important; }
-        
-        .search-input { background-color: #000 !important; border: 1px solid #333; color: white !important; }
-        .search-input::placeholder { color: #666; }
-        .search-btn { background-color: #000 !important; border: 1px solid #333; border-right: none; color: #666; }
-
-        main { min-height: 80vh; }
-
-        .dropdown-menu-dark { background-color: #060a11; border: 1px solid #1f2937; }
-        .dropdown-menu-dark .dropdown-item { color: #d1d5db; transition: 0.2s; }
-        .dropdown-menu-dark .dropdown-item:hover { color: red; background-color: transparent; padding-left: 20px; }
-
-    </style>
 </head>
 <body>
 
-    <header>
-        <nav class="navbar navbar-expand-lg py-2" id="navbarr">
-            <div class="container-fluid px-sm-5">
-                <a class="navbar-brand text-decoration-none" href="/proyectorefactorizacion/public/">
-                    <span class="fa-brands fa-weixin"></span>
-                </a>
-                
-                <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                    <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
-                </button>
+    <nav class="navbar navbar-expand-lg sticky-top top-0" id="navbarr">
+        <div class="container-fluid">
+            <a class="navbar-brand ps-2 ps-sm-5" href="/proyectorefactorizacion/public/"><span class="fa fa-wechat"></span></a>
+            
+            <?php if (isset($_SESSION["user_id"])): ?>
+                <div class="me-auto ms-1 ms-sm-3">
+                    <button class="btn btn-sm border border-3 border-danger btn-outline-danger rounded-5 mx-1" data-bs-toggle="modal" data-bs-target="#userprofilemodal"><span class="fa fa-user"></span></button>
+                    <button type="button" class="btn btn-outline-danger position-relative fa fa-bell" id="notf-btn">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger invisible"><i id="notification-no"></i></span>
+                    </button>
+                </div>
+            <?php else: ?>
+                <div class="me-auto ms-1 ms-sm-3">
+                    <button class="btn btn-sm btn-outline-danger rounded-0" data-bs-toggle="modal" data-bs-target="#signinmodal">LOGIN</button>
+                    <button class="btn btn-sm btn-outline-danger rounded-0" data-bs-toggle="modal" data-bs-target="#signupmodal">REGISTER</button>
+                    <button type="button" class="btn btn-outline-danger position-relative fa fa-bell d-none" id="notf-btn">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger invisible"><i id="notification-no"></i></span>
+                    </button>
+                </div>
+            <?php endif; ?>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link text-danger fw-bold" href="/proyectorefactorizacion/public/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/proyectorefactorizacion/public/about">About</a></li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <ul class="list-group" id="list"></ul>
+            
+            <button class="navbar-toggler text-danger" type="button" id="navbarcollapse" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContentt" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="fa fa-bars"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarSupportedContentt">
+                <div class="navbar-nav mx-auto mb-2 mb-lg-0 d-flex justify-content-center align-items-center">
+                    <ul class="list-group list-group-horizontal-sm">
+                        <li class="home list-group-item">
+                            <a class="nav-link" aria-current="page" href="/proyectorefactorizacion/public/">Home</a>
+                        </li>
+                        <li class="about list-group-item">
+                            <a class="nav-link" href="/proyectorefactorizacion/public/about">About</a>
+                        </li>
+                        <li class="categories dropdown list-group-item">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Categories
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-dark rounded-0 shadow" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu bg-dark">
                                 <?php if (!empty($globalCategories)): ?>
                                     <?php foreach ($globalCategories as $cat): ?>
                                         <li>
-                                            <a class="dropdown-item" href="/proyectorefactorizacion/public/categoria/<?php echo $cat->getId(); ?>">
+                                            <a class="dropdown-item text-capitalize text-secondary" href="/proyectorefactorizacion/public/categoria/<?php echo $cat->getId(); ?>">
                                                 <?php echo htmlspecialchars($cat->getName()); ?>
                                             </a>
                                         </li>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <li><a class="dropdown-item" href="#">Sin categorías</a></li>
+                                    <li><a class="dropdown-item text-secondary" href="#">Sin categorías</a></li>
                                 <?php endif; ?>
                             </ul>
                         </li>
-
-                        <li class="nav-item"><a class="nav-link" href="/proyectorefactorizacion/public/contact">Contact</a></li>
+                        <li class="contact list-group-item">
+                            <a class="nav-link" href="/proyectorefactorizacion/public/contact">Contact</a>
+                        </li>
                     </ul>
-
-                    <div class="d-flex align-items-center">
-                        
-                        <form class="d-flex me-4" action="/proyectorefactorizacion/public/buscar" method="GET">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text search-btn"><i class="fa fa-search"></i></span>
-                                <input class="form-control search-input" type="search" name="search" placeholder="Type \ to Search" required>
-                            </div>
-                        </form>
-
-                        <?php if (isset($_SESSION["user_id"])): ?>
-                            <a href="/proyectorefactorizacion/public/logout" class="btn btn-sm btn-outline-danger rounded-0 mx-1">LOGOUT</a>
-                            <button class="btn btn-sm border border-danger btn-outline-danger rounded-circle mx-1">
-                                <span class="fa fa-user"></span>
-                            </button>
-                        <?php else: ?>
-                            <div class="d-flex">
-                                <a href="/proyectorefactorizacion/public/login" class="btn btn-sm btn-outline-danger rounded-0 mx-1">LOGIN</a>
-                                <a href="/proyectorefactorizacion/public/register" class="btn btn-sm btn-outline-danger rounded-0 mx-1">REGISTER</a>
-                            </div>
-                        <?php endif; ?>
-                    </div>
                 </div>
+                
+                <form class="d-flex position-relative other-nav-content" role="search" method="get" action="/proyectorefactorizacion/public/buscar">
+                    <input class="form-control me-2 ps-5" type="search" name="search" placeholder="Type \ to Search" aria-label="Search">
+                    <button class="position-absolute start-0 ms-1 p-2 bg-transparent border-0" type="submit"><span class="fa fa-search text-secondary"></span></button>
+                </form>
             </div>
-        </nav>
-    </header>
-
+        </div>
+    </nav>
     <?php if (isset($_SESSION['alert'])): ?>
-        <div class="alert alert-<?php echo htmlspecialchars($_SESSION['alert']['type']); ?> alert-dismissible fade show mb-0 rounded-0 text-center border-0 shadow" role="alert">
+        <div class="alert alert-<?php echo htmlspecialchars($_SESSION['alert']['type']); ?> alert-dismissible fade show mb-0 rounded-0 text-center" role="alert" style="z-index: 1050;">
             <?php echo htmlspecialchars($_SESSION['alert']['message']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <?php unset($_SESSION['alert']); ?>
     <?php endif; ?>
 
-    <main>
+    <main style="min-height: 80vh;">
         <?php echo $content; ?>
     </main>
 
-    <footer class="text-white text-center py-4 mt-5" style="background-color: #060a11; border-top: 1px solid #1f2937;">
-        <p class="mb-0 text-secondary" style="font-size: 14px;">Copyright <?php echo date('Y'); ?> | Welcome to iDiscuss</p>
+    <footer class="container-fluid text-light mb-0 mt-4" style="background-color: #060a11; padding-top: 15px; padding-bottom: 15px;">
+        <p class="text-center mb-0">Copyright <?php echo date('Y'); ?> | Welcome to CHACHA's</p>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/proyectorefactorizacion/public/css_js/script.js"></script>
 </body>
 </html>
