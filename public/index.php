@@ -18,6 +18,8 @@ use Lenovo\ProyectoRefactorizacion\Domain\Entities\User;
 use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLUserRepository;
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\LoginUserUseCase;
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\RegisterUserUseCase;
+use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetCommentsByThreadUseCase;
+use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLCommentRepository;
 
 use Dotenv\Dotenv;
 
@@ -38,6 +40,9 @@ $getCategoriesUseCase = new GetCategoriesUseCase($categoryRepository);
 
 $threadRepository = new MySQLThreadRepository($pdo);
 $getThreadsByCategoryUseCase = new GetThreadsByCategoryUseCase($threadRepository);
+
+$commentRepository = new MySQLCommentRepository($pdo);
+$getCommentsByThreadUseCase = new GetCommentsByThreadUseCase($commentRepository);
 
 $viewsPath = __DIR__ . '/../views';
 $viewRenderer = new ViewRenderer($viewsPath);
