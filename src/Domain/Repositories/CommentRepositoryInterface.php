@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Lenovo\ProyectoRefactorizacion\Domain\Repositories;
 
+use Lenovo\ProyectoRefactorizacion\Domain\Entities\Comment;
+
 interface CommentRepositoryInterface {
     /**
-     * @return array<\Lenovo\ProyectoRefactorizacion\Domain\Entities\Comment>
+     * @return array<Comment>
      */
     public function getByThreadId(int $threadId): array;
 
     /**
      * Guarda un comentario en la base de datos.
-     * @param \Lenovo\ProyectoRefactorizacion\Domain\Entities\Comment $comment
+     * @param Comment $comment
      * @return bool
      */
-    public function save(\Lenovo\ProyectoRefactorizacion\Domain\Entities\Comment $comment): bool;
+    public function save(Comment $comment): bool;
 }

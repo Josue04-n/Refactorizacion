@@ -1,30 +1,3 @@
-    /**
-     * Guarda un comentario en la base de datos.
-     * @param Comment $comment
-     * @return bool
-     */
-    public function save(Comment $comment): bool
-    {
-        try {
-            $query = "INSERT INTO comments (comment_content, thread_id, comment_by, comment_date) VALUES (:content, :threadId, :userId, :timestamp)";
-            $statement = $this->_connection->prepare($query);
-            $content = $comment->getContent();
-            $threadId = $comment->getThreadId();
-            $userId = $comment->getUserId();
-            $timestamp = $comment->getTimestamp();
-            $statement->bindParam(':content', $content, PDO::PARAM_STR);
-            $statement->bindParam(':threadId', $threadId, PDO::PARAM_INT);
-            $statement->bindParam(':userId', $userId, PDO::PARAM_INT);
-            $statement->bindParam(':timestamp', $timestamp, PDO::PARAM_STR);
-            return $statement->execute();
-        } catch (PDOException $exception) {
-            throw new RuntimeException(
-                "Error al guardar el comentario en la base de datos.",
-                (int) $exception->getCode(),
-                $exception
-            );
-        }
-    }
 <?php
 
 declare(strict_types=1);
@@ -33,6 +6,8 @@ namespace Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence;
 
 use Lenovo\ProyectoRefactorizacion\Domain\Entities\Comment;
 use Lenovo\ProyectoRefactorizacion\Domain\Repositories\CommentRepositoryInterface;
+use Lenovo\ProyectoRefactorizacion\Domain\Entities\User;
+
 use PDO;
 use PDOException;
 use RuntimeException;
