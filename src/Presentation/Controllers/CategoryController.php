@@ -39,5 +39,21 @@
                 'threads' => $threads
             ]);
         }
+
+        public function storeThread(){
+            if(!isset($_SESSION['user_id'])){
+                header('Location: /proyectorefactorizacion/public/login');
+                exit();
+            }
+            $category = (int) $categoryId;
+            $user = (int) $_SESSION['user_id'];
+            $title = $_POST['thread_title'] ?? '';
+            $description = $_POST['thread_desc'] ?? '';
+
+            $this->_createThreadUseCase->execute($title, $description, $category, $user);
+
+            header("Location: /proyectorefactorizacion/public/categoria/" . $category);
+            exit;
+        }
     }
 ?>
