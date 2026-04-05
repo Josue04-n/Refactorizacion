@@ -47,14 +47,19 @@ $getCommentsByThreadUseCase = new GetCommentsByThreadUseCase($commentRepository)
 $viewsPath = __DIR__ . '/../views';
 $viewRenderer = new ViewRenderer($viewsPath);
 
+$createThreadUseCase = new \Lenovo\ProyectoRefactorizacion\Application\UseCases\CreateThreadUseCase($threadRepository);
+$createCommentUseCase = new \Lenovo\ProyectoRefactorizacion\Application\UseCases\CreateCommentUseCase($commentRepository);
+
 $categoryController = new CategoryController(
-    $getCategoriesUseCase, 
+    $getCategoriesUseCase,
     $getThreadsByCategoryUseCase,
+    $createThreadUseCase,
     $viewRenderer
 );
 
 $threadController = new ThreadController(
     $getCommentsByThreadUseCase,
+    $createCommentUseCase,
     $viewRenderer
 );
 

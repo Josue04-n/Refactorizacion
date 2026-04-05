@@ -5,21 +5,25 @@
 
     use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetCategoriesUseCase;
     use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetThreadsByCategoryUseCase;
+    use Lenovo\ProyectoRefactorizacion\Application\UseCases\CreateThreadUseCase;
     use Lenovo\ProyectoRefactorizacion\Presentation\Views\ViewRenderer;
 
     class CategoryController
     {
         private GetThreadsByCategoryUseCase $_getThreadsByCategoryUseCase;
         private GetCategoriesUseCase $_getCategoriesUseCase;
+        private CreateThreadUseCase $_createThreadUseCase;
         private ViewRenderer $_viewRenderer;
 
         public function __construct(
-        GetCategoriesUseCase $getCategoriesUseCase,
-        GetThreadsByCategoryUseCase $getThreadsByCategoryUseCase,
-        ViewRenderer $viewRenderer
+            GetCategoriesUseCase $getCategoriesUseCase,
+            GetThreadsByCategoryUseCase $getThreadsByCategoryUseCase,
+            CreateThreadUseCase $createThreadUseCase,
+            ViewRenderer $viewRenderer
         ) {
             $this->_getThreadsByCategoryUseCase = $getThreadsByCategoryUseCase;
             $this->_getCategoriesUseCase = $getCategoriesUseCase;
+            $this->_createThreadUseCase = $createThreadUseCase;
             $this->_viewRenderer = $viewRenderer;
         }
 
@@ -38,6 +42,24 @@
             $this->_viewRenderer->render('category/show', [
                 'threads' => $threads
             ]);
+        }
+        /**
+         * Maneja la creación de un nuevo hilo vía POST.
+         */
+        public function storeThread(string $categoryId): void
+        {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $title = $_POST['title'] ?? '';
+                $description = $_POST['description'] ?? '';
+                // Suponiendo que el ID de usuario está en sesión
+                $userId = $_SESSION['user_id'] ?? null;
+                if ($userId && $title && $description) {
+                    $this->_createThreadUseCase->execute($title, $description, (int)$categoryId, (int)$userId);
+                }
+                // Redirigir a la vista de la categoría para evitar reenvío
+                header('Location: /categoria/' . $categoryId);
+                exit;
+            }
         }
     }
 ?>
