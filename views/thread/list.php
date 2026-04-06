@@ -10,7 +10,7 @@
                         <h5 class="text-light">WelcØme To <span class="text-capitalize text-danger"><?php echo isset($category) ? htmlspecialchars($category->getName()) : 'Category'; ?></span> Threads</h5>
                     </div>
                     <div class="card-body border-0" style="border-bottom: 1px solid #2d3748 !important; padding-top: 1.5rem; padding-bottom: 1.5rem;">
-                        <p class="text-secondary m-0" style="font-size: 0.95rem;"><?php echo isset($category) ? htmlspecialchars($category->getDescription()) : 'Description'; ?></p>
+                        <p class="text-secondary m-0" style="font-size: 0.95rem;"><?php echo isset($category) ? htmlspecialchars($category->getDescription()) : 'Description...'; ?></p>
                     </div>
                     <div class="card-footer border-0 pt-3 bg-transparent">
                         <p class="m-0 text-warning" style="font-size: 0.9rem;">No spam!</p>
@@ -20,29 +20,29 @@
         </div>
     </div>
 
-    <div class="position-fixed" style="bottom: 40px; right: 14px; z-index: 1050;">
-        <a href="#" class="fa-solid fa-up-long float-end text-secondary text-decoration-none" id="backtotop" onclick="document.body.scrollTop=0;document.documentElement.scrollTop=0;event.preventDefault()"></a><br>
+    <div class="position-fixed" style="bottom: 40px; right: 14px; z-index: 1040;">
+        <a href="#" class="fa-solid fa-up-long float-end text-secondary text-decoration-none mb-2" id="backtotop" onclick="document.body.scrollTop=0;document.documentElement.scrollTop=0;event.preventDefault()"></a><br>
         <button class="btn btn-sm btn-outline-success text-success mt-2" type="button" style="background-color:#060a11; border-color: #198754;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasthreadlist" aria-controls="offcanvasBottom">
-            Add Your Question <img src="/proyectorefactorizacion/public/imgs/send-png-green.png" width="20px" alt="">
+            Add Your Question <img src="<?php echo BASE_URL; ?>/imgs/send-png-green.png" width="20px" alt="">
         </button>
     </div>
 
     <?php if (isset($_SESSION["user_id"])): ?>
-        <div class="offcanvas offcanvas-bottom" data-bs-scroll="true" tabindex="-1" id="offcanvasthreadlist" aria-labelledby="offcanvasBottomLabel" style="height:180px;background-color:#060a11;">
+        <div class="offcanvas offcanvas-bottom" data-bs-scroll="true" tabindex="-1" id="offcanvasthreadlist" style="height:180px;background-color:#060a11;">
             <div class="offcanvas-body p-1 overflow-hidden">
                 <div class="row">
                     <div class="col-md-10 mx-auto mb-1 mt-0">
-                        <button type="button" class="btn btn-sm float-end" data-bs-dismiss="offcanvas" aria-label="Close" style="color:red;"><span class="fa fa-close"></span></button>
+                        <button type="button" class="btn btn-sm float-end" data-bs-dismiss="offcanvas" style="color:red;"><span class="fa fa-close"></span></button>
                     </div>
                     <div class="col-md-10 mx-auto mb-1">
-                        <form action="/proyectorefactorizacion/public/categoria/<?php echo isset($category) ? $category->getId() : 0; ?>/hilo/guardar" method="POST">
+                        <form action="<?php echo BASE_URL; ?>/categoria/<?php echo isset($category) ? $category->getId() : 0; ?>/hilo/guardar" method="POST">
                             <div class="mb-3">
                                 <input type="text" name="thread_title" class="form-control text-light" style="background-color:black; box-shadow:none; border:1px solid #333;" placeholder="Question Title" required>
                             </div>
                             <div class="mb-3 position-relative">
                                 <textarea name="thread_desc" class="form-control text-light" style="background-color:black; box-shadow:none; border:1px solid #333;" cols="30" rows="2" placeholder="Question Description" required></textarea>
                                 <button type="submit" class="btn btn-sm position-absolute" style="right:5px; bottom:5px;">
-                                    <img src="/proyectorefactorizacion/public/imgs/send-png-white.png" width="25px" alt="">
+                                    <img src="<?php echo BASE_URL; ?>/imgs/send-png-white.png" width="25px" alt="">
                                 </button>
                             </div>
                         </form>
@@ -51,11 +51,11 @@
             </div>
         </div>
     <?php else: ?>
-        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasthreadlist" aria-labelledby="offcanvasBottomLabel" style="height:130px;background-color:#0d1117;">
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasthreadlist" style="height:130px;background-color:#0d1117;">
             <div class="offcanvas-body overflow-hidden p-1">
                 <div class="row">
                     <div class="col-md-10 mx-auto mt-0">
-                        <button type="button" class="btn btn-sm float-end" data-bs-dismiss="offcanvas" aria-label="Close" style="color:red;"><span class="fa fa-close"></span></button>
+                        <button type="button" class="btn btn-sm float-end" data-bs-dismiss="offcanvas" style="color:red;"><span class="fa fa-close"></span></button>
                     </div>
                     <div class="col-md-10 mx-auto">
                         <div class="p-4 rounded-0 text-light border border-secondary mb-2" style="background-color:#060a14;">
@@ -88,7 +88,7 @@
                                 </p>
                                 
                                 <h5 class="mt-1 mb-2">
-                                    <a class="text-decoration-none" href="/proyectorefactorizacion/public/hilo/<?php echo $thread->getId(); ?>">
+                                    <a class="text-decoration-none" href="<?php echo BASE_URL; ?>/hilo/<?php echo $thread->getId(); ?>">
                                         <span style="font-size:14px; color: #0ea5e9; font-weight: 600;"><?php echo htmlspecialchars($thread->getTitle()); ?></span>
                                     </a>
                                 </h5>
@@ -97,14 +97,17 @@
                                     <?php echo htmlspecialchars($thread->getDescription()); ?>
                                 </p>
                                 
-                                <?php $numReplies = method_exists($thread, 'getReplyCount') ? $thread->getReplyCount() : 0; ?>
+                                <?php 
+                                    // Verificamos si existe el método para no romper la vista
+                                    $numReplies = method_exists($thread, 'getReplyCount') ? $thread->getReplyCount() : 0; 
+                                ?>
                                 
                                 <?php if ($numReplies <= 0): ?>
-                                    <p class="w-sm-50 m-0"><a class="text-decoration-none p-0 text-warning d-block" style="font-size:12px;" href="/proyectorefactorizacion/public/hilo/<?php echo $thread->getId(); ?>">There's no Reply Yet | Be the first one Answer it. <span class="pt-1 fa fa-reply float-end"></span></a></p>
+                                    <p class="w-sm-50 m-0"><a class="text-decoration-none p-0 text-warning d-block" style="font-size:12px;" href="<?php echo BASE_URL; ?>/hilo/<?php echo $thread->getId(); ?>">There's no Reply Yet | Be the first one Answer it. <span class="pt-1 fa fa-reply float-end"></span></a></p>
                                 <?php elseif ($numReplies == 1): ?>
-                                    <p class="w-sm-50 m-0"><a class="text-decoration-none p-0 text-danger d-block" style="font-size:12px;" href="/proyectorefactorizacion/public/hilo/<?php echo $thread->getId(); ?>">There's only <?php echo $numReplies; ?> Reply <span class="pt-1 fa fa-reply float-end"></span></a></p>
+                                    <p class="w-sm-50 m-0"><a class="text-decoration-none p-0 text-danger d-block" style="font-size:12px;" href="<?php echo BASE_URL; ?>/hilo/<?php echo $thread->getId(); ?>">There's only <?php echo $numReplies; ?> Reply <span class="pt-1 fa fa-reply float-end"></span></a></p>
                                 <?php else: ?>
-                                    <p class="w-sm-50 m-0"><a class="text-decoration-none p-0 text-info d-block" style="font-size:12px;" href="/proyectorefactorizacion/public/hilo/<?php echo $thread->getId(); ?>">There are <?php echo $numReplies; ?> Replies <span class="pt-1 fa fa-reply float-end"></span></a></p>
+                                    <p class="w-sm-50 m-0"><a class="text-decoration-none p-0 text-info d-block" style="font-size:12px;" href="<?php echo BASE_URL; ?>/hilo/<?php echo $thread->getId(); ?>">There are <?php echo $numReplies; ?> Replies <span class="pt-1 fa fa-reply float-end"></span></a></p>
                                 <?php endif; ?>
                                 
                                 <hr class="text-secondary mt-3" style="border-top: 1px solid #2d3748;">
@@ -116,7 +119,6 @@
                         No Threads<p>Be the first one to ask a Qn.</p>
                     </div>
                 <?php endif; ?>
-
             </div>
         </div>
     </div>

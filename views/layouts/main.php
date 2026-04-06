@@ -9,13 +9,13 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iDiscuss Foro</title>
-    <link rel="icon" type="image/x-icon" href="/proyectorefactorizacion/public/imgs/icons8-poison-16.png">
+    <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>/imgs/icons8-poison-16.png">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
-    <link rel="stylesheet" href="/proyectorefactorizacion/public/css_js/style.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css_js/style.css">
 </head>
 <body>
 
@@ -103,6 +103,15 @@ if (session_status() === PHP_SESSION_NONE) {
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/proyectorefactorizacion/public/css_js/script.js"></script>
+    <script src="<?php echo BASE_URL; ?>/css_js/script.js"></script>
+
+    <?php if (isset($_SESSION["signin"])) : ?>
+        <script>
+            $(document).ready(function () {
+                $("#signinmodal").modal("show");
+            });
+        </script>
+        <?php unset($_SESSION["signin"]); ?>
+    <?php endif; ?>   
 </body>
 </html>
