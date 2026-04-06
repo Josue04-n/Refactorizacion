@@ -98,9 +98,13 @@ if (session_status() === PHP_SESSION_NONE) {
         <?php echo $content; ?>
     </main>
 
-    <footer class="container-fluid text-light mb-0 mt-4" style="background-color: #060a11; padding-top: 15px; padding-bottom: 15px;">
+    <footer class="container-fluid text-light mb-0" style="background-color: #060a11; padding-top: 15px; padding-bottom: 15px;">
         <p class="text-center mb-0">Copyright <?php echo date('Y'); ?> | Welcome to CHACHA's</p>
     </footer>
+    <script>
+        window.APP_BASE_URL = "<?php echo BASE_URL; ?>";
+        window.APP_ROOT_URL = "<?php echo rtrim(dirname(BASE_URL), '/'); ?>";
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/css_js/script.js"></script>

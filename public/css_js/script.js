@@ -1,7 +1,9 @@
 let loader = document.getElementById("loader");
 window.addEventListener("load", () => {
-  loader.style.opacity = "0";
-  loader.style.visibility = "hidden";
+  if (loader) {
+    loader.style.opacity = "0";
+    loader.style.visibility = "hidden";
+  }
 });
 
 let backtotop = document.getElementById("backtotop");
@@ -117,6 +119,7 @@ $(document).ready(function () {
 
 function loadNotifNo() {
   var xhttp = new XMLHttpRequest();
+  var appRoot = window.APP_ROOT_URL || "";
   xhttp.onreadystatechange = function (data) {
     if (this.readyState == 4 && this.status == 200) {
       var no = this.responseText;
@@ -138,19 +141,20 @@ function loadNotifNo() {
       }
     }
   };
-  xhttp.open("GET", "notification_no.php", true);
+  xhttp.open("GET", appRoot + "/notification_no.php", true);
   xhttp.send();
 }
 
 function loadNotifData() {
   var xhttp = new XMLHttpRequest();
+  var appRoot = window.APP_ROOT_URL || "";
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById("list").innerHTML = this.responseText;
     }
   };
 
-  xhttp.open("GET", "data.php", true);
+  xhttp.open("GET", appRoot + "/data.php", true);
   xhttp.send();
 }
 setInterval(() => {
