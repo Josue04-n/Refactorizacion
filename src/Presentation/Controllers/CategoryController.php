@@ -39,8 +39,20 @@
         public function show(string $id): void {
             $categoryId = (int) $id;
             $threads = $this->_getThreadsByCategoryUseCase->execute($categoryId);
-            $this->_viewRenderer->render('category/show', [
-                'threads' => $threads
+
+            $category = null;
+            $categories = $this->_getCategoriesUseCase->execute();
+
+            foreach ($categories as $item) {
+                if ($item->getId() === $categoryId) {
+                    $category = $item;
+                    break;
+                }
+            }
+
+            $this->_viewRenderer->render('thread/list', [
+                'threads' => $threads,
+                'category' => $category
             ]);
         }
         /**
@@ -49,15 +61,16 @@
         public function storeThread(string $categoryId): void
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $title = $_POST['title'] ?? '';
-                $description = $_POST['description'] ?? '';
+                $title = trim($_POST['thread_title'] ?? $_POST['title'] ?? '');
+                $description = trim($_POST['thread_desc'] ?? $_POST['description'] ?? '');
                 // Suponiendo que el ID de usuario está en sesión
                 $userId = $_SESSION['user_id'] ?? null;
                 if ($userId && $title && $description) {
                     $this->_createThreadUseCase->execute($title, $description, (int)$categoryId, (int)$userId);
                     }
                 // Redirigir a la vista de la categoría para evitar reenvío
-                header('Location: /categoria/' . $categoryId);
+                $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+                header('Location: ' . $baseUrl . '/categoria/' . $categoryId);
                 exit;
             }
         }

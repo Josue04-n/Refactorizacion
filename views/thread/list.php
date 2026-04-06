@@ -35,7 +35,7 @@
                         <button type="button" class="btn btn-sm float-end" data-bs-dismiss="offcanvas" style="color:red;"><span class="fa fa-close"></span></button>
                     </div>
                     <div class="col-md-10 mx-auto mb-1">
-                        <form action="<?php echo BASE_URL; ?>/categoria/<?php echo isset($category) ? $category->getId() : 0; ?>/hilo/guardar" method="POST">
+                        <form action="<?php echo BASE_URL; ?>/categoria/<?php echo isset($category) ? $category->getId() : 0; ?>/hilo" method="POST">
                             <div class="mb-3">
                                 <input type="text" name="thread_title" class="form-control text-light" style="background-color:black; box-shadow:none; border:1px solid #333;" placeholder="Question Title" required>
                             </div>
