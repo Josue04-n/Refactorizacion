@@ -24,8 +24,10 @@ class SearchThreadsUseCase
     
     public function execute(string $keyword): array
     {
+        $keyword = trim($keyword);
+
         // Validación temprana: si la búsqueda está vacía, no consultamos la BD
-        if (trim($keyword) === '') {
+        if ($keyword === '') {
             return [];
         }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lenovo\ProyectoRefactorizacion\Application\UseCases;
 
 use Exception;
+use Lenovo\ProyectoRefactorizacion\Domain\Entities\User;
 use Lenovo\ProyectoRefactorizacion\Domain\Repositories\UserRepositoryInterface;
 
 class LoginUserUseCase
@@ -16,7 +17,7 @@ class LoginUserUseCase
         $this->repository = $repository;
     }
 
-    public function execute(string $email, string $password): int
+    public function execute(string $email, string $password): User
     {
         // Buscamos al usuario por su email en el repositorio
         $user = $this->repository->findByEmail($email);
@@ -30,7 +31,7 @@ class LoginUserUseCase
             throw new Exception("Credenciales incorrectas: Contraseña inválida.");
         }
 
-        // Si es correcta, retorna el ID de usuario para iniciar la sesión
-        return $user->getId();
+        // Si es correcta, retorna la entidad completa del usuario
+        return $user;
     }
 }

@@ -55,6 +55,8 @@ class PageController
             $_SESSION['successmessage'] = "Tu mensaje ha sido enviado correctamente.";
         } catch (\InvalidArgumentException $e) {
             $_SESSION['errormessage'] = $e->getMessage();
+        } catch (\RuntimeException $e) {
+            $_SESSION['errormessage'] = "No se pudo enviar tu mensaje. Intenta nuevamente.";
         }
 
         header('Location: /proyectorefactorizacion/public/contact');

@@ -2,7 +2,7 @@
 
 <div class="container-fluid p-0 threadlist-page" id="maincontainer">
     
-    <div class="container my-4">
+    <div class="container mt-0 mb-4">
         <div class="row">
             <div class="col-md-10 mx-auto">
                 <div class="card rounded-0 threadlist-welcome" style="background-color: transparent; border: none;">
@@ -75,15 +75,21 @@
                 
                 <?php if (!empty($threads)): ?>
                     <?php foreach ($threads as $thread): ?>
+                        <?php $threadUsername = trim($thread->getUsername()) !== '' ? $thread->getUsername() : ('usuario_' . (string) $thread->getUserId()); ?>
+                        <?php $threadUserImage = trim($thread->getUserImage()); ?>
                         <div class="row mb-3">
                             <div class="col-2 d-flex justify-content-end align-items-start pt-1">
                                 <span class="rounded-5 border border-secondary overflow-hidden" style="width:31px; height:31px; display:inline-block;">
-                                    <img src="https://ui-avatars.com/api/?name=User+<?php echo $thread->getUserId(); ?>&background=random" class="img-fluid" width="31px" alt="">
+                                    <?php if ($threadUserImage !== ''): ?>
+                                        <img src="<?php echo BASE_URL; ?>/uploaded_img/<?php echo htmlspecialchars($threadUserImage); ?>" class="img-fluid" width="31" height="31" alt="avatar">
+                                    <?php else: ?>
+                                        <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($threadUsername); ?>&background=random" class="img-fluid" width="31" height="31" alt="avatar">
+                                    <?php endif; ?>
                                 </span>
                             </div>
                             <div class="col-10 ps-0">
                                 <p class="m-0 text-light">
-                                    <b><small>@usuario_<?php echo $thread->getUserId(); ?></small></b> 
+                                    <b><small>@<?php echo htmlspecialchars($threadUsername); ?></small></b> 
                                     <i class="float-end text-secondary" style="font-size:.7rem;"><small>Posted : <?php echo htmlspecialchars($thread->getTimestamp()); ?></small></i>
                                 </p>
                                 

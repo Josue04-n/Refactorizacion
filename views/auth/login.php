@@ -13,13 +13,13 @@
                         </div>
                     <?php endif; ?>
                     
-                    <?php if (isset($data['error'])): ?>
+                    <?php if (isset($error)): ?>
                         <div class="alert alert-danger">
-                            <?= htmlspecialchars($data['error']) ?>
+                            <?= htmlspecialchars($error) ?>
                         </div>
                     <?php endif; ?>
 
-                    <form action="/login" method="POST">
+                    <form action="<?php echo BASE_URL; ?>/login" method="POST">
                         <div class="mb-3">
                             <label for="email" class="form-label">Correo Electrónico</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="usuario@gmail.com" required>
@@ -32,7 +32,7 @@
                     </form>
                 </div>
                 <div class="card-footer text-center bg-white py-3 border-0">
-                    <p class="mb-0">¿No tienes cuenta? <a href="/register" class="text-danger text-decoration-none fw-bold">Regístrate aquí</a></p>
+                    <p class="mb-0">¿No tienes cuenta? <a href="<?php echo BASE_URL; ?>/register" class="text-danger text-decoration-none fw-bold">Regístrate aquí</a></p>
                 </div>
             </div>
         </div>

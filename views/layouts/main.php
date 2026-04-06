@@ -86,17 +86,129 @@ if (session_status() === PHP_SESSION_NONE) {
             </div>
         </div>
     </nav>
-    <?php if (isset($_SESSION['alert'])): ?>
+    <?php if (isset($_SESSION['alert']) && !isset($_SESSION['signin']) && !isset($_SESSION['signup'])): ?>
         <div class="alert alert-<?php echo htmlspecialchars($_SESSION['alert']['type']); ?> alert-dismissible fade show mb-0 rounded-0 text-center" role="alert" style="z-index: 1050;">
             <?php echo htmlspecialchars($_SESSION['alert']['message']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <?php unset($_SESSION['alert']); ?>
     <?php endif; ?>
 
     <main style="min-height: 80vh;">
         <?php echo $content; ?>
     </main>
+
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <div class="modal fade signmodal" id="userprofilemodal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border border-light">
+                    <div class="modal-header border-secondary">
+                        <h1 class="modal-title fs-4">Your Profile</h1>
+                        <button type="button" class="btn btn-sm btn-outline-warning rounded-2 close" data-bs-dismiss="modal">Close</button>
+                    </div>
+                    <div class="modal-body d-flex gap-4 align-items-center">
+                        <div class="flex-shrink-0">
+                            <?php $profileImage = trim($_SESSION['userimage'] ?? ''); ?>
+                            <?php if ($profileImage !== ''): ?>
+                                <img src="<?php echo BASE_URL; ?>/uploaded_img/<?php echo htmlspecialchars($profileImage); ?>" alt="profile" style="width:220px;height:220px;object-fit:cover;border-radius:50%;border:4px solid #ef4444;">
+                            <?php else: ?>
+                                <div style="width:220px;height:220px;border-radius:50%;border:4px solid #ef4444;display:flex;align-items:center;justify-content:center;color:#ef4444;font-size:110px;">
+                                    <span class="fa fa-user"></span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="flex-grow-1 text-light">
+                            <p class="m-0 py-2 text-success text-uppercase"><b>Username : </b><span class="text-danger"><?php echo htmlspecialchars($_SESSION['username'] ?? ''); ?></span></p>
+                            <hr class="my-2 text-secondary">
+                            <p class="m-0 py-2 text-success text-uppercase"><b>Gmail : </b><span class="text-danger"><?php echo htmlspecialchars($_SESSION['useremail'] ?? ''); ?></span></p>
+                            <hr class="my-2 text-secondary">
+                            <div class="d-flex gap-2 mt-3">
+                                <a href="<?php echo BASE_URL; ?>/logout" class="btn btn-outline-danger rounded-2">Logout</a>
+                                <button type="button" class="btn btn-outline-warning rounded-2" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if (!isset($_SESSION['user_id'])): ?>
+        <div class="modal fade signmodal" id="signinmodal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border border-light">
+                    <div class="modal-header border-secondary">
+                        <h1 class="modal-title fs-3">Sign In</h1>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-2 close" data-bs-dismiss="modal">Close</button>
+                    </div>
+                    <div class="modal-body">
+                        <?php if (isset($_SESSION['alert']) && $_SESSION['alert']['type'] === 'danger'): ?>
+                            <div class="alert alert-danger p-2"><?php echo htmlspecialchars($_SESSION['alert']['message']); ?></div>
+                        <?php endif; ?>
+                        <form action="<?php echo BASE_URL; ?>/login" method="POST">
+                            <div class="mb-3">
+                                <label for="signinemail" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="signinemail" name="email" placeholder="Email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="signinpassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="signinpassword" name="password" placeholder="Password" required>
+                            </div>
+                            <button type="submit" class="btn btn-sm btn-sign btn-outline-success">Sign in</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade signmodal" id="signupmodal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border border-light">
+                    <div class="modal-header border-secondary">
+                        <h1 class="modal-title fs-3">Sign Up</h1>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-2 close" data-bs-dismiss="modal">Close</button>
+                    </div>
+                    <div class="modal-body">
+                        <?php if (isset($_SESSION['alert']) && $_SESSION['alert']['type'] === 'warning'): ?>
+                            <div class="alert alert-warning p-2"><?php echo htmlspecialchars($_SESSION['alert']['message']); ?></div>
+                        <?php endif; ?>
+                        <form action="<?php echo BASE_URL; ?>/register" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label for="signupusername" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="signupusername" name="username" placeholder="Username" required>
+                                    <small class="message"></small>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="signupemail" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="signupemail" name="email" placeholder="Email" required>
+                                    <small class="message"></small>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label for="signuppassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="signuppassword" name="password" placeholder="password" required>
+                                    <small class="message"></small>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="signupcpassword" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="signupcpassword" name="cpassword" placeholder="Confirm password" required>
+                                    <small class="message"></small>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="pfp" class="form-label">Pfp</label>
+                                <input type="file" class="form-control" id="pfp" name="pfp">
+                                <small class="message"></small>
+                            </div>
+                            <button type="submit" id="submit" class="btn btn-sm btn-sign btn-outline-success">Sign Up</button>
+                            <small class="message d-block mt-2"></small>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <footer class="container-fluid text-light mb-0" style="background-color: #060a11; padding-top: 15px; padding-bottom: 15px;">
         <p class="text-center mb-0">Copyright <?php echo date('Y'); ?> | Welcome to CHACHA's</p>
@@ -109,13 +221,24 @@ if (session_status() === PHP_SESSION_NONE) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/css_js/script.js"></script>
 
-    <?php if (isset($_SESSION["signin"])) : ?>
+    <?php if (isset($_SESSION['signin'])) : ?>
         <script>
             $(document).ready(function () {
                 $("#signinmodal").modal("show");
             });
         </script>
-        <?php unset($_SESSION["signin"]); ?>
-    <?php endif; ?>   
+        <?php unset($_SESSION['signin']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['signup'])) : ?>
+        <script>
+            $(document).ready(function () {
+                $("#signupmodal").modal("show");
+            });
+        </script>
+        <?php unset($_SESSION['signup']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['alert'])) { unset($_SESSION['alert']); } ?>
 </body>
 </html>

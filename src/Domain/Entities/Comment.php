@@ -11,19 +11,25 @@ class Comment {
     private int $_threadId;
     private int $_userId;
     private string $_timestamp;
+    private string $_username;
+    private string $_userImage;
 
     public function __construct(
         int $id,
         string $content,
         int $threadId,
         int $userId,
-        string $timestamp
+        string $timestamp,
+        string $username = '',
+        string $userImage = ''
     ) {
         $this->_id = $id;
         $this->_content = $content;
         $this->_threadId = $threadId;
         $this->_userId = $userId;
         $this->_timestamp = $timestamp;
+        $this->_username = $username;
+        $this->_userImage = $userImage;
     }
 
     public function getId(): int {
@@ -44,6 +50,14 @@ class Comment {
 
     public function getTimestamp(): string {
         return $this->_timestamp;
+    }
+
+    public function getUsername(): string {
+        return $this->_username;
+    }
+
+    public function getUserImage(): string {
+        return $this->_userImage;
     }
 }
 

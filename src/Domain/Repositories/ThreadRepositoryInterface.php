@@ -7,6 +7,14 @@ namespace Lenovo\ProyectoRefactorizacion\Domain\Repositories;
 interface ThreadRepositoryInterface
 {
     /**
+     * Obtiene un hilo por su ID.
+     *
+     * @param int $threadId El ID del hilo
+     * @return \Lenovo\ProyectoRefactorizacion\Domain\Entities\Thread|null
+     */
+    public function getById(int $threadId): ?\Lenovo\ProyectoRefactorizacion\Domain\Entities\Thread;
+
+    /**
      * Obtiene todos los hilos que pertenecen a una categoría específica.
      *
      * @param int $categoryId El ID de la categoría

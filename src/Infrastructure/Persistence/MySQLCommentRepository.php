@@ -6,7 +6,6 @@ namespace Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence;
 
 use Lenovo\ProyectoRefactorizacion\Domain\Entities\Comment;
 use Lenovo\ProyectoRefactorizacion\Domain\Repositories\CommentRepositoryInterface;
-use Lenovo\ProyectoRefactorizacion\Domain\Entities\User;
 
 use PDO;
 use PDOException;
@@ -30,9 +29,12 @@ class MySQLCommentRepository implements CommentRepositoryInterface
     public function getByThreadId(int $threadId): array
     {
         try {
-            $query = "SELECT active, comment_by, comment_content, comment_date, comment_id, comment_on_id, thread_id
-                      FROM comments 
-                      WHERE thread_id = :threadId";
+            $query = "SELECT c.comment_id, c.comment_content, c.thread_id, c.comment_by, c.comment_date,
+                             u.username, u.user_image
+                      FROM comments c
+                      LEFT JOIN users u ON u.id = c.comment_by
+                      WHERE thread_id = :threadId
+                      ORDER BY c.comment_date ASC";
             
             $statement = $this->_connection->prepare($query);
             $statement->bindParam(':threadId', $threadId, PDO::PARAM_INT);
@@ -42,13 +44,13 @@ class MySQLCommentRepository implements CommentRepositoryInterface
 
             foreach ($results as $row) {
                 $comments[] = new Comment(
-                    (int) $row['active'],
-                    $row['comment_by'],
-                    (int) $row['comment_content'],
-                    (int) $row['comment_date'],
-                    $row['comment_id'],
-                    (int) $row['comment_on_id'],
-                    (int) $row['thread_id']
+                    (int) $row['comment_id'],
+                    (string) $row['comment_content'],
+                    (int) $row['thread_id'],
+                    (int) $row['comment_by'],
+                    (string) $row['comment_date'],
+                    (string) ($row['username'] ?? ''),
+                    (string) ($row['user_image'] ?? '')
                 );
             }
 
@@ -71,15 +73,20 @@ class MySQLCommentRepository implements CommentRepositoryInterface
     public function save(Comment $comment): bool
     {
         try {
-            $query = "INSERT INTO comments (comment_content, thread_id, comment_by, comment_date) VALUES (:content, :threadId, :userId, :timestamp)";
+            $query = "INSERT INTO comments (comment_content, thread_id, comment_by, comment_on_id, active, comment_date)
+                      VALUES (:content, :threadId, :userId, :commentOnId, :active, :timestamp)";
             $statement = $this->_connection->prepare($query);
             $content = $comment->getContent();
             $threadId = $comment->getThreadId();
             $userId = $comment->getUserId();
             $timestamp = $comment->getTimestamp();
+            $commentOnId = 0;
+            $active = 1;
             $statement->bindParam(':content', $content, PDO::PARAM_STR);
             $statement->bindParam(':threadId', $threadId, PDO::PARAM_INT);
             $statement->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $statement->bindParam(':commentOnId', $commentOnId, PDO::PARAM_INT);
+            $statement->bindParam(':active', $active, PDO::PARAM_INT);
             $statement->bindParam(':timestamp', $timestamp, PDO::PARAM_STR);
             return $statement->execute();
         } catch (PDOException $exception) {

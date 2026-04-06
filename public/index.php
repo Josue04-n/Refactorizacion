@@ -23,6 +23,7 @@ use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLUserRepositor
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\LoginUserUseCase;
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\RegisterUserUseCase;
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetCommentsByThreadUseCase;
+use Lenovo\ProyectoRefactorizacion\Application\UseCases\GetThreadByIdUseCase;
 use Lenovo\ProyectoRefactorizacion\Infrastructure\Persistence\MySQLCommentRepository;
 use Lenovo\ProyectoRefactorizacion\Application\UseCases\SearchThreadsUseCase;
 use Lenovo\ProyectoRefactorizacion\Presentation\Controllers\SearchController;
@@ -50,6 +51,7 @@ $viewRenderer->addGlobal('globalCategories', $globalCategories);
 
 $threadRepository = new MySQLThreadRepository($pdo);
 $getThreadsByCategoryUseCase = new GetThreadsByCategoryUseCase($threadRepository);
+$getThreadByIdUseCase = new GetThreadByIdUseCase($threadRepository);
 
 $commentRepository = new MySQLCommentRepository($pdo);
 $getCommentsByThreadUseCase = new GetCommentsByThreadUseCase($commentRepository);
@@ -72,6 +74,7 @@ $categoryController = new CategoryController(
 $threadController = new ThreadController(
     $getCommentsByThreadUseCase,
     $createCommentUseCase,
+    $getThreadByIdUseCase,
     $viewRenderer
 );
 

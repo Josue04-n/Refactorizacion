@@ -31,17 +31,12 @@ class MySQLContactRepository implements ContactRepositoryInterface
             $username = $contact->getUsername();
             $email = $contact->getEmail();
             $contactPhone = $contact->getContactPhone();
-            $contactPhoneInt = filter_var($contactPhone, FILTER_VALIDATE_INT);
             $message = $contact->getMessage();
-
-            if ($contactPhoneInt === false) {
-                throw new RuntimeException("El contacto debe ser un entero válido.");
-            }
 
             $statement->bindParam(':userId', $userId, PDO::PARAM_INT);
             $statement->bindParam(':username', $username, PDO::PARAM_STR);
             $statement->bindParam(':email', $email, PDO::PARAM_STR);
-            $statement->bindParam(':contactPhone', $contactPhoneInt, PDO::PARAM_INT);
+            $statement->bindParam(':contactPhone', $contactPhone, PDO::PARAM_STR);
             $statement->bindParam(':message', $message, PDO::PARAM_STR);
             
             return $statement->execute();

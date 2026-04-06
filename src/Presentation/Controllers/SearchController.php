@@ -24,8 +24,16 @@ class SearchController
     {
         // Capturamos el parámetro 'search' de la URL 
         $keyword = $_GET['search'] ?? '';
-        
-        $results = $this->_searchThreadsUseCase->execute((string) $keyword);
+
+        try {
+            $results = $this->_searchThreadsUseCase->execute((string) $keyword);
+        } catch (\RuntimeException $exception) {
+            $results = [];
+            $_SESSION['alert'] = [
+                'type' => 'danger',
+                'message' => 'Ocurrio un error al realizar la busqueda. Intenta nuevamente.'
+            ];
+        }
 
         $this->_viewRenderer->render('search/index', [
             'keyword' => $keyword,

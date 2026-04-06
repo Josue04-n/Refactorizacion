@@ -27,12 +27,18 @@ class AuthController
 
     public function showLogin(): void
     {
-        $this->_viewRenderer->render('auth/login');
+        $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+        $_SESSION['signin'] = true;
+        header('Location: ' . $baseUrl . '/');
+        exit;
     }
 
     public function showRegister(): void
     {
-        $this->_viewRenderer->render('auth/register');
+        $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+        $_SESSION['signup'] = true;
+        header('Location: ' . $baseUrl . '/');
+        exit;
     }
 
     public function login(): void
@@ -42,21 +48,30 @@ class AuthController
             $password = $_POST['password'] ?? '';
 
             try {
-                $userId = $this->_loginUseCase->execute($email, $password);
+                $user = $this->_loginUseCase->execute($email, $password);
                 
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }
                 
-                $_SESSION['user_id'] = $userId;
-                $_SESSION['useremail'] = $email;
+                $_SESSION['user_id'] = $user->getId();
+                $_SESSION['username'] = $user->getUsername();
+                $_SESSION['useremail'] = $user->getEmail();
+                $_SESSION['userimage'] = $user->getUserImage();
                 $_SESSION['loggedin'] = true;
 
-                header('Location: /');
+                $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+                header('Location: ' . $baseUrl . '/');
                 exit;
             } catch (Exception $e) {
-                // Manejar error (ej. pasando mensaje a la vista)
-                $this->_viewRenderer->render('auth/login', ['error' => $e->getMessage()]);
+                $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+                $_SESSION['signin'] = true;
+                $_SESSION['alert'] = [
+                    'type' => 'danger',
+                    'message' => $e->getMessage()
+                ];
+                header('Location: ' . $baseUrl . '/');
+                exit;
             }
         }
     }
@@ -70,20 +85,46 @@ class AuthController
             $cpassword = $_POST['cpassword'] ?? '';
 
             if ($password !== $cpassword) {
-                $this->_viewRenderer->render('auth/register', ['error' => 'Las contraseñas no coinciden']);
+                $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+                $_SESSION['signup'] = true;
+                $_SESSION['alert'] = [
+                    'type' => 'warning',
+                    'message' => 'Las contraseñas no coinciden'
+                ];
+                header('Location: ' . $baseUrl . '/');
                 return;
             }
 
             try {
                 $success = $this->_registerUseCase->execute($username, $email, $password);
                 if ($success) {
-                    header('Location: /login?registrosuccess=true');
+                    $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+                    $_SESSION['signin'] = true;
+                    $_SESSION['alert'] = [
+                        'type' => 'success',
+                        'message' => 'Registro exitoso. Ya puedes iniciar sesion.'
+                    ];
+                    header('Location: ' . $baseUrl . '/');
                     exit;
                 } else {
-                    $this->_viewRenderer->render('auth/register', ['error' => 'No se pudo registrar el usuario.']);
+                    $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+                    $_SESSION['signup'] = true;
+                    $_SESSION['alert'] = [
+                        'type' => 'warning',
+                        'message' => 'No se pudo registrar el usuario.'
+                    ];
+                    header('Location: ' . $baseUrl . '/');
+                    exit;
                 }
             } catch (Exception $e) {
-                $this->_viewRenderer->render('auth/register', ['error' => $e->getMessage()]);
+                $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+                $_SESSION['signup'] = true;
+                $_SESSION['alert'] = [
+                    'type' => 'warning',
+                    'message' => $e->getMessage()
+                ];
+                header('Location: ' . $baseUrl . '/');
+                exit;
             }
         }
     }
@@ -97,7 +138,8 @@ class AuthController
         session_unset();
         session_destroy();
         
-        header('Location: /');
+        $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+        header('Location: ' . $baseUrl . '/');
         exit;
     }
 }
